@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.navTab-items{
+   @apply flex text-xs sm:text-lg items-center justify-center cursor-pointer border border-gray-200 rounded-3xl min-h-[30px] sm:min-h-[43px] min-w-[110px] sm:min-w-[150px];
+   &:hover {
+      @apply border border-black;
+   }
+   &.active{
+      @apply bg-emerald-900 text-white;
+   }
+}

@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.category-section{
+   @apply absolute border-t border-gray-300 overflow-auto max-h-96 w-2/5 bg-white;
+   transition: height 500ms;
+   border-radius:5px;
+}

@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.stars{
+   @apply relative flex items-center h-full;
+   min-width:100px;
+   min-height: 20px;
+   .star{
+      @apply absolute inline;
+		mask: url(../../assets/images/icon-logo/star.svg);
+      &:not(.placeholder){
+         background-color: yellow;
+      }
+      &.placeholder{
+         @apply bg-gray-300;
+      }
+   }
+}

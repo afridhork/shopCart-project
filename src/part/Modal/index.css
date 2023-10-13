@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.bg-modal-upper{
+   background: linear-gradient(0.25turn,#6495ed, #99ffcc);
+  
+  /* Add the blur effect */
+  -webkit-filter: blur(50px);
+
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+.img-modal{
+  @apply border bg-white rounded-full absolute p-2 top-1/4;
+  left: 35%
+}

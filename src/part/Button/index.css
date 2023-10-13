@@ -1,0 +1,22 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.btn{
+   @apply rounded-3xl px-5 sm:px-12 py-2;
+   &.btn-primary{
+      @apply bg-emerald-900 font-semibold border-2 border-emerald-900 text-white;
+   }
+   &.btn-secondary{
+      @apply bg-white font-semibold border-2 border-emerald-900 text-emerald-900 hover:bg-emerald-900 hover:text-white;
+   }
+   &.btn-block{
+      @apply font-semibold border-2 w-full;
+   }
+   &.btn-modal{
+      @apply bg-amber-500 font-semibold border-2 border-amber-500 text-white w-full;
+   }
+   &.disabled{
+      @apply bg-slate-200 font-semibold pointer-events-none	;
+   }
+}

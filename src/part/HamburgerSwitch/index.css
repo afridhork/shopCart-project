@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.hamburger-section{
+   @apply fixed border-t border-b-2 border-gray-300 overflow-auto left-0 w-full mt-2 bg-white;
+   transition: height 500ms;
+   border-radius:5px;
+}
