@@ -1,5 +1,5 @@
 import React from 'react'
-import Banner from '@/assets/images/banner.jpg'
+import Banner from '@/assets/images/Banner.jpg'
 
 export default function Hero() {
   return (
