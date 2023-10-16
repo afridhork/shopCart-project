@@ -13,7 +13,7 @@ export default function checkout({params}: {params: {slug: string[]}}) {
    useEffect(() => {
       console.log(params);
       console.log(data);
-   }, [data])
+   },[])
    if(isLoading){
       return(
          <div className='container px-10 py-5'>
