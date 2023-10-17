@@ -7,8 +7,8 @@ module.exports = {
    async redirects() {
      return [
        {
-         source: '/@/app/category/[slug]/page.tsx',
-         destination: '/@/app/category/[...slug]/page.tsx',
+         source: '/app/category/[slug]/page.tsx',
+         destination: '/app/category/[...slug]/page.tsx',
          permanent: false,
        },
      ];
