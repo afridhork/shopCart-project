@@ -8,7 +8,7 @@ import Star from '@/part/Star/page';
 import { useSingleProductQuery } from '@/store/api/product'
 import React, { ChangeEvent, useState, useEffect } from 'react'
 
-export default function checkout({params}: {params: {slug: string[]}}) {
+export default function categoryDetailProductPage({params}: {params: {slug: string[]}}) {
    const {data,isSuccess, isLoading} = useSingleProductQuery(+params.slug[1])   
    useEffect(() => {
       console.log(params);
