@@ -5,8 +5,6 @@ import CatalogItem from '@/part/CatalogItem/page';
 import Breadcrumb from '@/part/Breadcrumb/page';
 
 export default function categoryProductPage({params}: {params: {slug: string}}) {
-  console.log('category',params);
-  
   const {data,isSuccess, isLoading} = useCategoryProductQuery(params.slug)
   if(isLoading){
     const itemEmpty = {

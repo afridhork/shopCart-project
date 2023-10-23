@@ -5,8 +5,6 @@ import Skeleton from 'react-loading-skeleton';
 export default function ReviewProduct({data, isLoading}: {data?: any, isLoading: boolean}) {
   const [description, setDescription] = useState(data.description)
   useEffect(() => {
-    console.log('cek review',data);
-    
     const description = data.description
     const length = 20
     if(description){

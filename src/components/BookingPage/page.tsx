@@ -2,12 +2,32 @@ import Breadcrumb from '@/part/Breadcrumb/page';
 import Button from '@/part/Button/page';
 import InputNumber from '@/part/FormInput/InputNumber/page'
 import Star from '@/part/Star/page'
-import { checkoutData } from '@/store/slices/checkoutPage';
 import React, { ChangeEvent, useState, useEffect } from 'react'
 import Skeleton from 'react-loading-skeleton';
-import { useDispatch } from 'react-redux';
 
 import 'react-loading-skeleton/dist/skeleton.css'
+import { useAddCartMutation } from '@/store/api/cart';
+
+interface addCart {
+   userId: null | number,
+   products: product[]
+}
+
+interface product{
+   id: null | number,
+   quantity: null | number
+}
+
+interface dataAuth{
+   id: null | number,
+   username: string,
+   email: string,
+   firstName: string,
+   lastName: string,
+   gender: string,
+   image: string,
+   token: string
+}
 
 export default function BookingPage(
    {
@@ -23,13 +43,60 @@ export default function BookingPage(
    const [dataBook, setDataBook] = useState({
       totalBook: 1
    })
+   const [errorMsg, setErrorMsg] = useState('')
+   const [authData, setAuthData] = useState<dataAuth>({
+    id: null,
+    username: "",
+    email: "",
+    firstName: "",
+    lastName: "",
+    gender: "",
+    image: "",
+    token: ""
+})
    const [imgShow, setImgShow] = useState('')
+   const [payloadAddCart, setPayloadAddCart] = useState<addCart>({
+      userId:null,
+      products:[
+         {
+            id:null,
+            quantity:null
+         }
+      ]
+   })
+   const [addCart] = useAddCartMutation()
    
    useEffect(() => {
+      const authData_local = JSON.parse(localStorage.getItem('auth data') as any)
+      if(authData_local){
+         setAuthData(authData_local.data)
+      }
       if(data){
          setImgShow(data.thumbnail)
       }
    }, [data])
+
+   useEffect(() => {
+      if(authData && data){
+         setPayloadAddCart({
+            userId: authData.id,
+            products:[
+               {
+                  id:data.id,
+                  quantity: dataBook.totalBook
+               }
+            ]
+         })
+      }
+   }, [data,dataBook])
+   
+   function handleAddCart(){
+      if(authData){
+         addCart(payloadAddCart)
+      }else{
+         setErrorMsg('You must sign in first')
+      }
+   }
 
    function handleClickChangeImg(image: string){
       setImgShow(image)
@@ -124,7 +191,10 @@ export default function BookingPage(
                      <div className='mr-4'>
                         <Button href="/checkout" onClick={startBooking} name="Buy Now" isPrimary/>
                      </div>
-                     <Button name="Add to Cart" isSecondary/>
+                     <Button name="Add to Cart" onClick={handleAddCart} isSecondary/>
+                     {
+                        errorMsg && (<p className="text-red-600">{errorMsg}</p>)
+                     }
                   </div>
                </div>
             </div>

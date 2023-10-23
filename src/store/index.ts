@@ -1,12 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit';
 import {categoryFetch} from '@/store/api/category'
 import {productFetch} from '@/store/api/product'
-import {cartFetch} from '@/store/api/cart'
+import {cartFetch, cartPost} from '@/store/api/cart'
 import {authSection} from '@/store/api/auth'
 import landingPageReducer from '@/store/slices/landingPage'
 import searchPage from './slices/searchPage';
 import checkoutPage from './slices/checkoutPage';
-import carthPage from './slices/cartPage';
+import cartPage from './slices/cartPage';
 
 const store = configureStore({
   reducer: {
@@ -14,13 +14,14 @@ const store = configureStore({
     [productFetch.reducerPath]: productFetch.reducer,
     [authSection.reducerPath]: authSection.reducer,
     [cartFetch.reducerPath]: cartFetch.reducer,
+    [cartPost.reducerPath]: cartPost.reducer,
     dataBrand: landingPageReducer,
     dataDiscount: landingPageReducer,
     dataRating: landingPageReducer,
     dataCategory: landingPageReducer,
     dataSearch: searchPage,
     dataCheckout: checkoutPage,
-    dataCart: carthPage
+    dataCart: cartPage
   },
   middleware: (getDefaultMiddleware)=>(
    getDefaultMiddleware()
@@ -28,6 +29,7 @@ const store = configureStore({
      .concat(productFetch.middleware)
      .concat(authSection.middleware)
      .concat(cartFetch.middleware)
+     .concat(cartPost.middleware)
   )
 });
 

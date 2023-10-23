@@ -9,11 +9,7 @@ import { useSingleProductQuery } from '@/store/api/product'
 import React, { ChangeEvent, useEffect, useState } from 'react'
 
 export default function categoryDetailProductPage({params}: {params: {slug: string[]}}) {
-   const {data,isSuccess, isLoading} = useSingleProductQuery(+params.slug[1])   
-   useEffect(() => {
-      console.log('cek route', params)
-   }, [data])
-   
+   const {data,isSuccess, isLoading} = useSingleProductQuery(+params.slug[1])
    if(isLoading){
       return(
          <div className='container px-10 py-5'>
