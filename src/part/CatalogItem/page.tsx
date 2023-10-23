@@ -19,7 +19,7 @@ export default function CatalogItem({
   const Router = useRouter()
   const handleClickItem = (category: string, id: number) => {
     
-    Router.push(`/category/${category}/${id}`)
+    Router.push(`/detailCategory/${category}/${id}`)
  }
   return (
     <div onClick={()=>handleClickItem(data.category as string,data.id as number)} className={`${!isLoading && 'catalog-card'} cursor-pointer`}>
