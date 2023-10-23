@@ -6,10 +6,14 @@ import Button from '@/part/Button/page';
 import InputNumber from '@/part/FormInput/InputNumber/page';
 import Star from '@/part/Star/page';
 import { useSingleProductQuery } from '@/store/api/product'
-import React, { ChangeEvent, useState } from 'react'
+import React, { ChangeEvent, useEffect, useState } from 'react'
 
-export default function categoryDetailProductPageEx({params}: {params: {slug: string[]}}) {
+export default function categoryDetailProductPage({params}: {params: {slug: string[]}}) {
    const {data,isSuccess, isLoading} = useSingleProductQuery(+params.slug[1])   
+   useEffect(() => {
+      console.log('cek route', params)
+   }, [data])
+   
    if(isLoading){
       return(
          <div className='container px-10 py-5'>
