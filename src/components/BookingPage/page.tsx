@@ -91,9 +91,10 @@ export default function BookingPage(
    }, [data,dataBook])
    
    function handleAddCart(){
-      if(authData){
+      if(authData.id != null){
          addCart(payloadAddCart)
       }else{
+         console.log('etst');
          setErrorMsg('You must sign in first')
       }
    }
@@ -191,10 +192,12 @@ export default function BookingPage(
                      <div className='mr-4'>
                         <Button href="/checkout" onClick={startBooking} name="Buy Now" isPrimary/>
                      </div>
-                     <Button name="Add to Cart" onClick={handleAddCart} isSecondary/>
-                     {
-                        errorMsg && (<p className="text-red-600">{errorMsg}</p>)
-                     }
+                     <div>
+                        <Button name="Add to Cart" onClick={handleAddCart} isSecondary/>
+                        {
+                           errorMsg && (<p className="text-red-600">{errorMsg}</p>)
+                        }
+                     </div>
                   </div>
                </div>
             </div>

@@ -81,6 +81,7 @@ export default function Header() {
     }else{
       setLogin(prev => !prev)
       localStorage.removeItem("auth data");
+      window.location.reload()
     }
   }
 
