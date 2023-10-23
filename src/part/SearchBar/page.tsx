@@ -11,7 +11,7 @@ export default function SearchBar() {
   const {data,isSuccess} = useSearchProductQuery(productName)
   const [searchBar, setSearchBar] = useState(false)
   const refNav = useRef<HTMLDivElement>(null)
-  const router = useRouter()
+  const Router = useRouter()
   const pathname = usePathname()
   const path = pathname.split('/')
   useEffect(() => {
@@ -43,13 +43,18 @@ export default function SearchBar() {
 		}
 	};
 
+  function handleClickItem(category: string, id: number){
+    Router.push(`/detailCategory/${category}/${id}`)
+    setSearchBar(false)
+  }
+
   function startSearch(e: KeyboardEvent<HTMLInputElement>){
     if(productName.length > 0){
       if(e.key === 'Enter'){
         if(searchBar){
           handleClickSearchBar()
         }
-        router.push(`/search/${productName}`)
+        Router.push(`/search/${productName}`)
         // if(data?.products.length > 0){
         //   router.push(`/search/${productName}`)
         // }else{
@@ -61,8 +66,8 @@ export default function SearchBar() {
   
   return (
     <>
-    <div className="search-wrapper">
-      <div ref={refNav} className={`input-wrapper ${searchBar ? 'active' : ''}`}>
+    <div className="search-wrapper" ref={refNav}>
+      <div className={`input-wrapper ${searchBar ? 'active' : ''}`}>
       {/* <div className={`input-wrapper ${search ? 'active' : ''}`}> */}
         {/* <input onClick={onClick} type="search" placeholder='Search Product'/> */}
         <input 
@@ -99,7 +104,7 @@ export default function SearchBar() {
                   data.products.length > 0 ? (
                     data.products.map((item: any,index: React.Key | null | undefined) => {
                       return(
-                        <div className='items-search-wrapper' key={index}>
+                        <div className='items-search-wrapper' onClick={()=>handleClickItem(item.category, item.id)} key={index}>
                           <div className='flex items-center'>
                             <div className='search-img-wrapper'>
                               <img src={item.thumbnail} width="60" height="60" alt="" />
