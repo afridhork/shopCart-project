@@ -12,5 +12,23 @@ export const cartFetch = createApi({
    })
 })
 
+export const cartPost = createApi({
+   reducerPath:'cartPost',
+   baseQuery : fetchBaseQuery({baseUrl: configValue}),
+   endpoints:(builder) => ({
+      addCart: builder.mutation<any, any>({
+         query: payload =>({
+            url: '/carts/add',
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+               userId: payload.userId,
+               products: payload.products
+             })
+         })
+      })
+   })
+})
 
 export const { useUserCartQuery } = cartFetch
+export const { useAddCartMutation } = cartPost
