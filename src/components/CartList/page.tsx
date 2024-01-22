@@ -7,8 +7,9 @@ import { useDispatch } from 'react-redux'
 
 export default function CartList({data, isLoading}:{data: productCart[], isLoading: boolean}) {
    const dispatch = useDispatch()
-   const [allItemValue, setAllItemValue] = useState(false)
+   const [allItemValue, setAllItemValue] = useState<boolean>(false)
    const [itemList, setItemList] = useState(data)
+   const [isCheckClidked, setIsCheckClidked] = useState<boolean>(false)
    useEffect(() => {
       setItemList(prev => {
          const newData = [...prev]
@@ -20,6 +21,7 @@ export default function CartList({data, isLoading}:{data: productCart[], isLoadi
    },[])
    
    function handleClickCheckbox(index?:number){
+      setIsCheckClidked(true)
       if(typeof index != 'undefined'){
          setItemList(prev => {
             const newData = [...prev]
@@ -28,15 +30,21 @@ export default function CartList({data, isLoading}:{data: productCart[], isLoadi
          })
       }else{
          setAllItemValue(prev=> !prev)
-            setItemList(prev=> {
-               const newData = [...prev]
-               newData.map((item,index) =>{
-               newData[index] = {...item, value:!newData[index].value}
+      }
+   }
+
+   useEffect(() => {
+      if(isCheckClidked){
+         setItemList(prev=> {
+            const newData = [...prev]
+            newData.map((item,index) =>{
+               newData[index] = {...item, value:allItemValue}
             })
             return newData
          })
       }
-   }
+   }, [allItemValue])
+   
    
    useEffect(() => {
       dispatch(
@@ -59,12 +67,13 @@ export default function CartList({data, isLoading}:{data: productCart[], isLoadi
                return (
                   <div className='grid grid-cols-1 border-b sm:grid-cols-2 gap-4 py-5' key={index}>
                      <div className='col-span-1'>
-                        <div className='flex'>
+                        <div className='flex items-center'>
                            {
                               itemList[index].value != undefined && (
                                  <InputCheckBox value={itemList[index].value} onClick={()=>handleClickCheckbox(index)} />
                               )
                            }
+                           <img src={items.thumbnail} alt="" className='w-16 h-12 ml-3' />
                            <span className='block ml-3 text-sm sm:text-2xl font-semibold'>{isLoading ? <Skeleton className='block w-[300px] h-[50px]'/> : items.title}</span>
                         </div>
                         <div className='flex justify-end sm:hidden col-span-1 text-end'>
@@ -77,11 +86,11 @@ export default function CartList({data, isLoading}:{data: productCart[], isLoadi
                      </div>
                      <div className='hidden sm:block col-span-1 text-end pr-5'>
                         <div className='flex justify-end'>
-                           <span className='block tex-xs sm:text-xl'>{isLoading ? <Skeleton className='w-[50px]'/> : `${((+items.discountedPrice)).toFixed(0)}`}</span>
+                           <span className='block tex-xs sm:text-xl'>{isLoading ? <Skeleton className='w-[50px]'/> : `$${((+items.discountedPrice)).toFixed(0)}`}</span>
                            <div className='flex'>
                               {
                                  isLoading ? <Skeleton/> : (<>
-                                    <span className='block text-red-500 tex-xs sm:text-xs line-through'>{`${((+items.price * items.quantity)).toFixed(0)}`}</span>
+                                    <span className='block text-red-500 tex-xs sm:text-xs line-through'>${`${((+items.price * items.quantity)).toFixed(0)}`}</span>
                                     <span className="text-xs text-red-500 bg-red-100 rounded-md p-1">-{items.discountPercentage.toFixed(0)}%</span>
                                  </>)
                               }

@@ -25,7 +25,7 @@ export default function ReviewProduct({data, isLoading}: {data?: any, isLoading:
                   <div className='col-span-1'>
                     {
                       isLoading ? <Skeleton className='h-[50px]'/> : (
-                        <img src={item.images} alt="" />
+                        <img src={item.images ? item.images : item.thumbnail} alt="" />
                       )
                     }
                   </div>

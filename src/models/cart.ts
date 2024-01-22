@@ -15,6 +15,7 @@ interface cartArray{
 export interface productCart{
    discountPercentage: number,
    discountedPrice: number,
+   thumbnail: string,
    id: number,
    price: number|string,
    quantity: number,

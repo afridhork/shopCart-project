@@ -38,7 +38,7 @@ export default function Cart() {
                   <h4 className='font-semibold border-b px-2 mb-3'>Cart ({`${data ? data.carts[0].products.length : 0} `})</h4>
                   <div className="grid grid-cols-1">
                      {
-                        isSuccess && (
+                        isSuccess && data.carts[0].products.length > 0 ? (
                            data.carts[0].products.map((items,index: React.Key)=>{
                               return(
                                  <div className='flex justify-between items-center items-center hover:bg-gray-200 px-2 pb-3' onClick={handleClickCartPage} key={index}>
@@ -52,6 +52,10 @@ export default function Cart() {
                                  </div>
                               )
                            })
+                        ):(
+                           <div>
+                              <h6 className='text-center italic text-gray-400 mb-5'>Anda belum menyimpan barang</h6>
+                           </div>
                         )
                      }
                   </div>

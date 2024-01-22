@@ -1,8 +1,6 @@
 'use client'
 import CartList from '@/components/CartList/page'
-import DeliveryInformation from '@/components/DeliveryInformation/page'
 import OrderSummaryCart from '@/components/OrderSummaryCart/page'
-import { productCart } from '@/models/cart'
 import { useUserCartQuery } from '@/store/api/cart'
 import React, { useEffect, useState } from 'react'
 

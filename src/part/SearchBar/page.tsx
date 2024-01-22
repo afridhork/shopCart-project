@@ -34,7 +34,7 @@ export default function SearchBar() {
 
   
   function handleClickSearchBar(){
-    setSearchBar(prev=>!prev)
+    setSearchBar(true)
   }
 
    const handleClickOutside: Parameters<Document['addEventListener']>[1] = (event) => {
