@@ -37,7 +37,7 @@ export default function SearchBar() {
     setSearchBar(true)
   }
 
-   const handleClickOutside: Parameters<Document['addEventListener']>[1] = (event) => {
+  const handleClickOutside: Parameters<Document['addEventListener']>[1] = (event) => {
 		if (refNav && !refNav.current?.contains(event.target as HTMLDivElement)) {
 			setSearchBar(false)
 		}

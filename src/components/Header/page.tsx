@@ -125,7 +125,10 @@ export default function Header() {
               onChange={updateData}
             />
           </div>
-          <div className='mt-20'>
+          <p>Test Account</p>
+          <p>Username: kminchelle</p>
+          <p>password: 0lelplR</p>
+          <div className='mt-[20px]'>
             <Button name="Sign in" isPrimary isBlock onClick={handleClickSignIn}/>
           </div>
         </div>
