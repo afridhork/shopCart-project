@@ -21,16 +21,16 @@ export default function TopCategories({isLoading}: {isLoading: boolean}) {
   useEffect(() => {
     if(isSuccess){
       for(let i = 0; i < data.length; i++){
-        if(data[i] == 'furniture'){
-          tempData.push({'name':data[i], 'img':furniture.src})
-        }else if(data[i] == 'womens-bags'){
-          tempData.push({'name':data[i], 'img':womenBag.src})
-        }else if(data[i] == 'laptops'){
-          tempData.push({'name':data[i], 'img':laptop.src})
-        }else if(data[i] == 'womens-shoes'){
-          tempData.push({'name':data[i], 'img':womenShoes.src})
-        }else if(data[i] == 'home-decoration'){
-          tempData.push({'name':data[i], 'img':homeDecor.src})
+        if(data[i].slug == 'furniture'){
+          tempData.push({'name':data[i].slug, 'img':furniture.src})
+        }else if(data[i].slug == 'womens-bags'){
+          tempData.push({'name':data[i].slug, 'img':womenBag.src})
+        }else if(data[i].slug == 'laptops'){
+          tempData.push({'name':data[i].slug, 'img':laptop.src})
+        }else if(data[i].slug == 'womens-shoes'){
+          tempData.push({'name':data[i].slug, 'img':womenShoes.src})
+        }else if(data[i].slug == 'home-decoration'){
+          tempData.push({'name':data[i].slug, 'img':homeDecor.src})
         }
       }
       // const newArray: any = tempData.map((m) => [m.name, m]);
