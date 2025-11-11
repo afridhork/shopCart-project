@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react'
 import './index.css'
-import { getCategory } from '@/models/category'
 import { useRouter } from 'next/navigation'
 interface product{
    name: string,
+   slug: string,
    img: string
  }
 export default function DropdownNav({data}: {data: product[]}) {   
@@ -50,7 +50,7 @@ export default function DropdownNav({data}: {data: product[]}) {
                   {
                      data.map((items,index: React.Key)=>{
                         return(
-                           <div onClick={()=>handleClickCategory(items.name)} className='flex items-center bg-gray-100 mb-3' key={index}>
+                           <div onClick={()=>handleClickCategory(items.slug)} className='flex items-center bg-gray-100 mb-3' key={index}>
                               <img className='w-14 h-14 p-1' src={items.img}/>
                               <h3 className='ml-4 semibold'>
                                  {items.name}

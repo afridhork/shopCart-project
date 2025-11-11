@@ -17,6 +17,7 @@ import Skeleton from 'react-loading-skeleton';
 
 interface product{
   name: string,
+  slug: string,
   img: string
 }
 
@@ -126,8 +127,8 @@ export default function Header() {
             />
           </div>
           <p>Test Account</p>
-          <p>Username: kminchelle</p>
-          <p>password: 0lelplR</p>
+          <p>Username: ariam</p>
+          <p>password: ariampass</p>
           <div className='mt-[20px]'>
             <Button name="Sign in" isPrimary isBlock onClick={handleClickSignIn}/>
           </div>
@@ -138,9 +139,11 @@ export default function Header() {
   useEffect(() => {
     for(let i in data){
       for(let j in categoryImg){
-        if(data[i as any] == j){
+        if(data[i as any].slug == j){
+          console.log('cek', data[i as any].slug);
           categoryPackList.push({
-            'name': data[i as any],
+            'name': data[i as any].name,
+            'slug': data[i as any].slug,
             'img': categoryImg[j as keyof typeof categoryImg].src
           })
         }
@@ -158,7 +161,7 @@ export default function Header() {
         isSuccess ? (
           <>
             <nav>
-              <div className='container fixed mx-auto bg-white flex items-center z-20 px-2 py-3 sm:px-10'>
+              <div className='container fixed mx-auto bg-white flex items-center justify-between z-20 px-2 py-3 sm:px-10'>
                 <Link href="/">
                   <img
                     className='mr-7 hidden sm:inline'
@@ -168,7 +171,7 @@ export default function Header() {
                     style={{minWidth: '175px'}}
                   />
                 </Link>
-                <div className='flex contents'>
+                <div className='flex contents jus'>
                   <ul className="hidden sm:flex">
                     <li className='cursor-pointer'>
                       {
@@ -177,9 +180,9 @@ export default function Header() {
                         )
                       }
                     </li>
-                    <li className={`cursor-pointer`}>Deals</li>
+                    {/* <li className={`cursor-pointer`}>Deals</li>
                     <li className={`cursor-pointer`} style={{minWidth:'82px'}}>What's new</li>
-                    <li className={`cursor-pointer`}>Delivery</li>
+                    <li className={`cursor-pointer`}>Delivery</li> */}
                   </ul>
                   <SearchBar />
                   <ul className='flex'>
@@ -209,7 +212,7 @@ export default function Header() {
                         )
                       }
                     </li>
-                    <li className='mt-1 items-center cursor-pointer'>
+                    <li className='items-center cursor-pointer'>
                       <Cart/>
                     </li>
                     <li className='static mt-1 sm:hidden ml-0 items-center cursor-pointer'>

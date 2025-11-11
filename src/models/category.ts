@@ -1,1 +1,5 @@
-export type getCategory = Array<string>
+export interface category {
+   name: string,
+   slug: string,
+   url: string
+}

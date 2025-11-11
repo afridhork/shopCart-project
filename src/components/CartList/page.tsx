@@ -86,7 +86,7 @@ export default function CartList({data, isLoading}:{data: productCart[], isLoadi
                      </div>
                      <div className='hidden sm:block col-span-1 text-end pr-5'>
                         <div className='flex justify-end'>
-                           <span className='block tex-xs sm:text-xl'>{isLoading ? <Skeleton className='w-[50px]'/> : `$${((+items.discountedPrice)).toFixed(0)}`}</span>
+                           <span className='block tex-xs sm:text-xl'>{isLoading ? <Skeleton className='w-[50px]'/> : `$${((+items.discountedTotal)).toFixed(0)}`}</span>
                            <div className='flex'>
                               {
                                  isLoading ? <Skeleton/> : (<>

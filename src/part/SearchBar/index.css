@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .search-wrapper{
-   @apply static w-full;
+   @apply static w-[50%];
    direction:rtl;
    .input-wrapper{
       @apply relative flex h-8 w-full rounded-3xl;

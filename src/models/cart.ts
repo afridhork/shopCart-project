@@ -13,6 +13,7 @@ interface cartArray{
 }
 
 export interface productCart{
+   discountedTotal: number,
    discountPercentage: number,
    discountedPrice: number,
    thumbnail: string,
