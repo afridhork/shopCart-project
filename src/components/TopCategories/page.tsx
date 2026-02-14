@@ -67,7 +67,7 @@ export default function TopCategories({isLoading}: {isLoading: boolean}) {
       isSuccess && (
         <div className="py-14">
           <h1 className="font-bold mb-10">{ isLoading ? <Skeleton className="w-[200px]"/> :  'Our Top Categories'}</h1>
-          <div className="categoreis-wrapper">
+          <div className="categories-wrapper">
             <div className="prev-slide cursor-pointer" onClick={prevSlide}>
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />

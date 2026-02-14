@@ -41,7 +41,7 @@ export default function TopBrand({isLoading}: {isLoading: boolean}) {
               return(
                 <div className="card-brand" key={index}>
                   <div className="flex items-center">
-                    <div className={`brand-img-wraper ${isLoading ? 'w-[80px] h-[80px]' : 'min-w-[80px] min-h-[80px]'}`} >
+                    <div className={`brand-img-wrapper ${isLoading ? 'w-[80px] h-[80px]' : 'min-w-[80px] min-h-[80px]'}`} >
                       {
                         isLoading ? <Skeleton circle className="h-[81px] w-[81px] right-[1px] bottom-[5px]"/> : (
                           <img className="brand-img" src={brand.img} width="50" alt="" />
