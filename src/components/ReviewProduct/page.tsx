@@ -2,10 +2,11 @@ import { allProduct } from '@/models/product'
 import React, {useState, useEffect} from 'react'
 import Skeleton from 'react-loading-skeleton';
 
-export default function ReviewProduct({data, isLoading}: {data?: any, isLoading: boolean}) {
-  const [description, setDescription] = useState(data.description)
+export default function ReviewProduct({ data, isLoading }: { data?: allProduct[]; isLoading: boolean }) {
+  const [description, setDescription] = useState(data?.[0]?.description ?? '')
   useEffect(() => {
-    const description = data.description
+    const first = data?.[0]
+    const description = first?.description
     const length = 20
     if(description){
       const descValue = description.substring(0,length)
@@ -19,13 +20,13 @@ export default function ReviewProduct({data, isLoading}: {data?: any, isLoading:
       {/* <div className='flex sm:grid grid-cols-1 sm:grid-cols-3 gap-4'> */}
         {
           data ? (
-            data.map((item: any,index: any) => {
+            data.map((item: allProduct, index: number) => {
               return(
                 <div className='flex sm:grid grid-cols-1 sm:grid-cols-3 gap-4 py-5' key={index}>
                   <div className='col-span-1'>
                     {
                       isLoading ? <Skeleton className='h-[50px]'/> : (
-                        <img src={item.images ? item.images : item.thumbnail} alt="" />
+                        <img src={Array.isArray(item.images) ? item.images[0] : (item.images ?? item.thumbnail)} alt="" />
                       )
                     }
                   </div>

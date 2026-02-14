@@ -13,14 +13,14 @@ export default function categoryDetailProductPage({params}: {params: {slug: stri
    if(isLoading){
       return(
          <div className='container px-10 py-5'>
-            <BookingPage data={data} isLoading={isLoading} breadcrumbData={[params.slug[0],'']} />
+            <BookingPage data={data ?? undefined} isLoading={isLoading} breadcrumbData={[params.slug[0],'']} />
          </div>
       )
    }
    return (
       <>
       {
-         isSuccess && (
+         isSuccess && data && (
             <div className='container px-10 py-5'>
                <BookingPage data={data} isLoading={isLoading} breadcrumbData={[params.slug[0],data.title]} />
                <SimiliarProduct param={params.slug[0]} idProduct={+params.slug[1]}/>

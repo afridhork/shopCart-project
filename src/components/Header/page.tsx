@@ -14,6 +14,8 @@ import { useSigninMutation } from '@/store/api/auth';
 import HamburgerSwitch from '@/part/HamburgerSwitch/page';
 import Cart from '@/part/Cart/page';
 import Skeleton from 'react-loading-skeleton';
+import { getStoredAuth, setStoredAuth, removeStoredAuth } from '@/lib/storage';
+import type { dataUserModel } from '@/models/checkout';
 
 interface product{
   name: string,
@@ -24,7 +26,7 @@ interface product{
 export default function Header() {
   const {data,isSuccess} = useCategoryListQuery()
   const categoryPackList: product[] = []
-  const [categoryPack, setCategoryPack] = useState<any>('')
+  const [categoryPack, setCategoryPack] = useState<product[] | ''>('')
   const categoryImg = ctgImg
   const [login, setLogin] = useState(false)
   const [openModal, setOpenModal] = useState(false)
@@ -49,11 +51,11 @@ export default function Header() {
   const [signin] = useSigninMutation()
 
   useEffect(() => {
-    const checkAuth = JSON.parse(localStorage.getItem('auth data') as any)
-    if(checkAuth){
+    const checkAuth = getStoredAuth()
+    if (checkAuth) {
       setAuthData(checkAuth.data)
       setLogin(true)
-    }else{
+    } else {
       setAuthData({
         email:'',
         firstName:'',
@@ -75,13 +77,13 @@ export default function Header() {
     if(!authData.username){
       signin(formPayload).then((payload) => {
         setLogin(prev => !prev)
-        localStorage.setItem('auth data', JSON.stringify(payload))
+        if ('data' in payload && payload.data) setStoredAuth({ data: payload.data as dataUserModel })
         setOpenModal(prev => !prev)
         window.location.reload()
       })
-    }else{
+    } else {
       setLogin(prev => !prev)
-      localStorage.removeItem("auth data");
+      removeStoredAuth()
       window.location.reload()
     }
   }
@@ -137,16 +139,15 @@ export default function Header() {
     )
   }
   useEffect(() => {
-    for(let i in data){
-      for(let j in categoryImg){
-        if(data[i as any].slug == j){
-          console.log('cek', data[i as any].slug);
-          categoryPackList.push({
-            'name': data[i as any].name,
-            'slug': data[i as any].slug,
-            'img': categoryImg[j as keyof typeof categoryImg].src
-          })
-        }
+    if (!data) return
+    for (const item of data) {
+      const src = categoryImg[item.slug as keyof typeof categoryImg]
+      if (src) {
+        categoryPackList.push({
+          name: item.name,
+          slug: item.slug,
+          img: src.src
+        })
       }
     }
     setCategoryPack(categoryPackList)
@@ -175,7 +176,7 @@ export default function Header() {
                   <ul className="hidden sm:flex">
                     <li className='cursor-pointer'>
                       {
-                        isSuccess && (
+                        isSuccess && Array.isArray(categoryPack) && (
                           <DropdownNav data={categoryPack}/>
                         )
                       }
@@ -216,7 +217,7 @@ export default function Header() {
                       <Cart/>
                     </li>
                     <li className='static mt-1 sm:hidden ml-0 items-center cursor-pointer'>
-                      <HamburgerSwitch data={categoryPack}/>
+                      <HamburgerSwitch data={Array.isArray(categoryPack) ? categoryPack : []}/>
                     </li>
                   </ul>
                 </div>

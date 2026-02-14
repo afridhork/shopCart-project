@@ -5,18 +5,18 @@ import { useSelector } from 'react-redux'
 
 export default function BestDiscount({isLoading}: {isLoading: boolean}) {
   const data = useSelector((state:RootState)=> state.dataDiscount.discountItems)
-  let refCatalog = useRef<any>(null)
+  const refCatalog = useRef<HTMLDivElement | null>(null)
   const prevSlide = () =>{
     const catalog = document.querySelector('.catalogs-bestDiscount-wrapper')
     catalog?.scrollBy({
-      left: refCatalog.current?.offsetLeft - 360,
+      left: (refCatalog.current?.offsetLeft ?? 0) - 360,
       behavior: "smooth",
     })
   }
   const nextSlide = () =>{
     const catalog = document.querySelector('.catalogs-bestDiscount-wrapper')
     catalog?.scrollBy({
-      left: refCatalog.current?.offsetLeft + 360,
+      left: (refCatalog.current?.offsetLeft ?? 0) + 360,
       behavior: "smooth",
     })
     // if(catalog?.scrollLeft){

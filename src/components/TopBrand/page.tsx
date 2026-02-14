@@ -8,18 +8,18 @@ import Skeleton from 'react-loading-skeleton';
 
 export default function TopBrand({isLoading}: {isLoading: boolean}) {
   const data = useSelector((state:RootState)=> state.dataBrand.topBrand)
-  let refBrand = useRef<any>(null)
+  const refBrand = useRef<HTMLDivElement | null>(null)
   const prevSlide = () =>{
     const brand = document.querySelector('.brand-list')
     brand?.scrollBy({
-      left: refBrand.current?.offsetLeft - 315,
+      left: (refBrand.current?.offsetLeft ?? 0) - 315,
       behavior: "smooth",
     })
   }
   const nextSlide = () =>{
     const brand = document.querySelector('.brand-list')
     brand?.scrollBy({
-      left: refBrand.current?.offsetLeft + 315,
+      left: (refBrand.current?.offsetLeft ?? 0) + 315,
       behavior: "smooth",
     })
     // if(catalog?.scrollLeft){

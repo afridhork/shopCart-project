@@ -9,7 +9,7 @@ import { useSingleProductQuery } from '@/store/api/product'
 import React, { ChangeEvent, useState, useEffect } from 'react'
 
 export default function categoryDetailProductPageEx({params}: {params: {slug: string[]}}) {
-   const {data,isSuccess, isLoading} = useSingleProductQuery(+params.slug[1])   
+   const {data,isSuccess, isLoading} = useSingleProductQuery(+params.slug[1])
    useEffect(() => {
       console.log(params);
       console.log(data);
@@ -17,14 +17,14 @@ export default function categoryDetailProductPageEx({params}: {params: {slug: st
    if(isLoading){
       return(
          <div className='container px-10 py-5'>
-            <BookingPage data={data} isLoading={isLoading} breadcrumbData={[params.slug[0],'']} />
+            <BookingPage data={data ?? undefined} isLoading={isLoading} breadcrumbData={[params.slug[0],'']} />
          </div>
       )
    }
    return (
       <>
       {
-         isSuccess && (
+         isSuccess && data && (
             <div className='container px-10 py-5'>
                <BookingPage data={data} isLoading={isLoading} breadcrumbData={[params.slug[0],data.title]} />
                <SimiliarProduct param={params.slug[0]} idProduct={+params.slug[1]}/>

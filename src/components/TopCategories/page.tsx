@@ -42,18 +42,18 @@ export default function TopCategories({isLoading}: {isLoading: boolean}) {
     }
   },[data])
 
-  let refCategories = useRef<any>(null)
+  const refCategories = useRef<HTMLDivElement | null>(null)
   const prevSlide = () =>{
     const category = document.querySelector('.categories-list')
     category?.scrollBy({
-      left: refCategories.current?.offsetLeft - 263,
+      left: (refCategories.current?.offsetLeft ?? 0) - 263,
       behavior: "smooth",
     })
   }
   const nextSlide = () =>{
     const category = document.querySelector('.categories-list')
     category?.scrollBy({
-      left: refCategories.current?.offsetLeft + 263,
+      left: (refCategories.current?.offsetLeft ?? 0) + 263,
       behavior: "smooth",
     })
     // if(catalog?.scrollLeft){

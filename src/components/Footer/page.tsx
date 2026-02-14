@@ -1,22 +1,19 @@
 import React, { useEffect } from 'react'
 import logo from '@/assets/images/icon-logo/logo.svg'
-import { useDispatch, useSelector } from 'react-redux'
-import { RootState } from '@/store'
-import { useAllProductQuery } from '@/store/api/category'
-import { categoryItem } from '@/store/slices/landingPage'
+import { useAppDispatch, useAppSelector } from '@/store/hooks'
+import { useAllProductQuery } from '@/store/api/product';
+import { setCategoryItems } from '@/store/slices/categorySlice';
 
 export default function Footer() {
    const {data,isSuccess,isLoading} = useAllProductQuery()
 
-   const dispatch = useDispatch()
+   const dispatch = useAppDispatch()
    useEffect(() => {
-      if(isSuccess) {
-         dispatch(
-            categoryItem(data)
-         )
+      if (isSuccess && data) {
+         dispatch(setCategoryItems(data));
       }
-   }, [data])
-  const dataCategory = useSelector((state: RootState)=>state.dataCategory.categoryItems)
+   }, [data, isSuccess, dispatch]);
+  const dataCategory = useAppSelector((state) => state.dataCategory.categoryItems)
    
   return (
    <>

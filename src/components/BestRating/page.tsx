@@ -5,18 +5,18 @@ import { useSelector } from 'react-redux'
 
 export default function BestRating({isLoading}: {isLoading: boolean}) {
   const data = useSelector((state:RootState)=> state.dataRating.ratingItems)
-  let refCatalog = useRef<any>(null)
+  const refCatalog = useRef<HTMLDivElement | null>(null)
   const prevSlide = () =>{
     const catalog = document.querySelector('.catalogs-bestRating-wrapper')
     catalog?.scrollBy({
-      left: refCatalog.current?.offsetLeft - 360,
+      left: (refCatalog.current?.offsetLeft ?? 0) - 360,
       behavior: "smooth",
     })
   }
   const nextSlide = () =>{
     const catalog = document.querySelector('.catalogs-bestRating-wrapper')
     catalog?.scrollBy({
-      left: refCatalog.current?.offsetLeft + 360,
+      left: (refCatalog.current?.offsetLeft ?? 0) + 360,
       behavior: "smooth",
     })
   }

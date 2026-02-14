@@ -1,12 +1,11 @@
 import React, { ChangeEvent, useState, useEffect } from 'react'
-import { useSelector } from 'react-redux'
-import { RootState } from '@/store'
+import { useAppSelector } from '@/store/hooks'
 import { productCart } from '@/models/cart'
 import Button from '@/part/Button/page'
 import Skeleton from 'react-loading-skeleton'
 
 export default function OrderSummary({isLoading}: {isLoading: boolean}) {
-  const data = useSelector((state: RootState) => state.dataCart.cartData)
+  const data = useAppSelector((state) => state.dataCart.cartData)
   const [orderPrice, setOrderPrice] = useState({
     price:0,
     discount:0,
@@ -19,8 +18,8 @@ export default function OrderSummary({isLoading}: {isLoading: boolean}) {
     let tempData
     data.map((item,index) => {
       tempData = {...item, images:imgShow}
-      if(item.value){
-        newData.push(tempData as any)
+      if (item.value) {
+        newData.push({ ...tempData } as productCart)
       }
     })
     setDataOrder(newData)
@@ -29,27 +28,26 @@ export default function OrderSummary({isLoading}: {isLoading: boolean}) {
   function countPriceAndDiscount(type: string){
     if (dataOrder?.length != 0){
       
-      let priceOrder: any, discountOrder: any, totalOrder
+      let priceOrder: number, discountOrder: number, totalOrder: number
       if(type == 'price'){
-        priceOrder = dataOrder?.reduce((accumulator, currentValue) => +accumulator + (+currentValue.price * currentValue.quantity), 0 )
+        priceOrder = dataOrder?.reduce((accumulator, currentValue) => Number(accumulator) + (Number(currentValue.price) * currentValue.quantity), 0) ?? 0
         // setOrderPrice(prev => ({
         //   ...prev,
         //   price:priceOrder
         // }))
         return priceOrder
       }else if(type == 'discount'){
-        discountOrder = dataOrder?.reduce((accumulator, currentValue) => +accumulator + ((+currentValue.price * currentValue.quantity) * +currentValue.discountPercentage/100), 0 )
+        discountOrder = dataOrder?.reduce((accumulator, currentValue) => Number(accumulator) + ((Number(currentValue.price) * currentValue.quantity) * Number(currentValue.discountPercentage) / 100), 0) ?? 0
         // setOrderPrice(prev => ({
         //   ...prev,
         //   discount:discountOrder
         // }))
-        if(discountOrder){
-          return discountOrder.toFixed(0)
+        if (discountOrder !== undefined) {
+          return Number(discountOrder.toFixed(0))
         }
       }
-    }else{
-      return 0
     }
+    return 0
   }
 
   function handleClickOrderCart(){
@@ -57,9 +55,6 @@ export default function OrderSummary({isLoading}: {isLoading: boolean}) {
     localStorage.setItem('checkout data', JSON.stringify(dataOrder))
   }
 
-  useEffect
-  
-  
   return (
     <>
       <div className="hidden sm:block bg-white border-0 sm:border-2 w-full">
@@ -87,7 +82,7 @@ export default function OrderSummary({isLoading}: {isLoading: boolean}) {
             {
               isLoading ? <Skeleton className="w-[200px] h-[30px]"/> : (<>
                 <h2 className="font-bold">Total</h2>
-                <h5>${countPriceAndDiscount('price') - countPriceAndDiscount('discount')}</h5>
+                <h5>${(Number(countPriceAndDiscount('price')) - Number(countPriceAndDiscount('discount')))}</h5>
               </>)
             }
           </div>
@@ -105,7 +100,7 @@ export default function OrderSummary({isLoading}: {isLoading: boolean}) {
         <div className="flex static justify-between p-3">
           <div>
             <h6>Total Harga ({`${dataOrder?.length}`} barang)</h6>
-            <h5>${countPriceAndDiscount('price') - countPriceAndDiscount('discount')}</h5>
+            <h5>${(Number(countPriceAndDiscount('price')) - Number(countPriceAndDiscount('discount')))}</h5>
           </div>
           <Button 
             name={`Buy (${dataOrder?.length})`} 

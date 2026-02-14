@@ -2,9 +2,11 @@ import Button from '@/part/Button/page'
 import Modal from '@/part/Modal/page'
 import React, { useEffect, useState } from 'react'
 import checkLogo from '@/assets/images/check.png'
+import type { productCart } from '@/models/cart'
+import type { allProduct } from '@/models/product'
+import { getStoredDeliveryInfo } from '@/lib/storage'
 
-
-export default function PriceDetail({data, voucher}: {data: any, voucher: number}) {
+export default function PriceDetail({ data, voucher }: { data: (productCart | allProduct)[]; voucher: number }) {
    const [openModal, setOpenModal] = useState(false)
    const [isFormFinished, setIsFormFinished] = useState(false)
    const [isValidate, setIsValidate] = useState(false)
@@ -22,16 +24,16 @@ export default function PriceDetail({data, voucher}: {data: any, voucher: number
    })
 
    function sectionPrice() {
-      const productSum = data.reduce((acc: any,currValue: any ) => acc + +currValue.quantity,0)
+      const productSum = data.reduce((acc, currValue) => acc + Number((currValue as productCart).quantity ?? 1), 0)
       setPriceDetail(prev=>({
          ...prev,
          productTotal:productSum
       }))
       
-      const priceSum = data.reduce((acc: any, currValue: any) => acc + (+currValue.price - (+currValue.discountPercentage/100 * +currValue.price)), 0)
+      const priceSum = data.reduce((acc, currValue) => acc + (Number(currValue.price) - (Number(currValue.discountPercentage) / 100 * Number(currValue.price))), 0)
       setPriceDetail(prev=>({
          ...prev,
-         priceTotal:priceSum.toFixed(0)
+         priceTotal: Number(priceSum.toFixed(0))
       }))
 
       const tax = priceSum * 0.1
@@ -48,9 +50,16 @@ export default function PriceDetail({data, voucher}: {data: any, voucher: number
    }
 
    function handleClickModal(){
-      const checkForm = JSON.parse(localStorage.getItem('delivery info') as any)
-      for(let i in checkForm) {
-         if(checkForm[i]){
+      const checkForm = getStoredDeliveryInfo()
+      if (!checkForm) {
+        setIsFormFinished(false)
+        setIsValidate(true)
+        setOpenModal(false)
+        return
+      }
+      const entries = Object.entries(checkForm)
+      for (const [, value] of entries) {
+         if (value) {
             setIsFormFinished(true)
             setOpenModal(prev => !prev)
             setIsValidate(false)

@@ -3,8 +3,10 @@ import React, { ChangeEvent, useState } from 'react'
 import PaymentDetail from '../PaymentDetail/page'
 import PriceDetail from '../PriceDetail/page'
 import { dummyVoucher } from '@/static/dummyVoucher'
+import type { productCart } from '@/models/cart'
+import type { allProduct } from '@/models/product'
 
-export default function OrderSummary({data}: {data: any}) {
+export default function OrderSummary({ data }: { data: (productCart | allProduct)[] }) {
   const [discount, setDiscount] = useState({
     voucher: '',
     discountPercentage: 0

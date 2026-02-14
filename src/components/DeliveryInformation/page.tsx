@@ -5,6 +5,7 @@ import React, { ChangeEvent, useEffect, useState } from 'react'
 import { address } from '@/static/dummyAddress'
 import { DeliveryInformationModel, dataUserModel } from '@/models/checkout'
 import InputTextArea from '@/part/FormInput/InputTextArea/page'
+import { getStoredAuth, setStoredDeliveryInfo } from '@/lib/storage'
 
 export default function DeliveryInformation() {
    const [valueCheckbox, setValueCheckbox] = useState(false)
@@ -34,21 +35,21 @@ export default function DeliveryInformation() {
    })
 
    useEffect(() => {
-      const data = JSON.parse(localStorage.getItem('auth data') as any)
-      if(data){
-         data.data = {
+      const data = getStoredAuth()
+      if (data?.data) {
+         const merged = {
             ...data.data,
-            address: address.address, 
+            address: address.address,
             phone: address.phone,
             postalCode: address.postalCode,
             city: address.city
          }
-         setDataUser(data.data)
+         setDataUser(merged)
       }
    }, [])
-   
+
    useEffect(() => {
-      localStorage.setItem('delivery info', JSON.stringify(deliveryInformation)) 
+      setStoredDeliveryInfo(deliveryInformation) 
    }, [deliveryInformation])
    
    function handleChangeFormText(e:ChangeEvent<HTMLInputElement>){

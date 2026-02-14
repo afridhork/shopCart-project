@@ -1,12 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit';
-import {categoryFetch} from '@/store/api/category'
-import {productFetch} from '@/store/api/product'
-import {cartFetch, cartPost} from '@/store/api/cart'
-import {authSection} from '@/store/api/auth'
-import landingPageReducer from '@/store/slices/landingPage'
-import searchPage from './slices/searchPage';
-import checkoutPage from './slices/checkoutPage';
-import cartPage from './slices/cartPage';
+import { categoryFetch } from '@/store/api/category';
+import { productFetch } from '@/store/api/product';
+import { cartFetch, cartPost } from '@/store/api/cart';
+import { authSection } from '@/store/api/auth';
+import brandReducer from '@/store/slices/brandSlice';
+import discountReducer from '@/store/slices/discountSlice';
+import ratingReducer from '@/store/slices/ratingSlice';
+import categoryReducer from '@/store/slices/categorySlice';
+import searchReducer from './slices/searchSlice';
+import checkoutReducer from './slices/checkoutSlice';
+import cartReducer from './slices/cartSlice';
 
 const store = configureStore({
   reducer: {
@@ -15,13 +18,13 @@ const store = configureStore({
     [authSection.reducerPath]: authSection.reducer,
     [cartFetch.reducerPath]: cartFetch.reducer,
     [cartPost.reducerPath]: cartPost.reducer,
-    dataBrand: landingPageReducer,
-    dataDiscount: landingPageReducer,
-    dataRating: landingPageReducer,
-    dataCategory: landingPageReducer,
-    dataSearch: searchPage,
-    dataCheckout: checkoutPage,
-    dataCart: cartPage
+    dataBrand: brandReducer,
+    dataDiscount: discountReducer,
+    dataRating: ratingReducer,
+    dataCategory: categoryReducer,
+    dataSearch: searchReducer,
+    dataCheckout: checkoutReducer,
+    dataCart: cartReducer,
   },
   middleware: (getDefaultMiddleware)=>(
    getDefaultMiddleware()

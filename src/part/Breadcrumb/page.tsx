@@ -7,8 +7,8 @@ export default function Breadcrumb({name}:{name:string[]}) {
    ])
    let tempData = breadcrumb
    useEffect(() => {
-      for(let i in name as any){
-         tempData.push({name: name[i as any]})
+      for (const n of name) {
+         tempData.push({ name: n })
       }
       const unique = [...new Map(tempData.map((m) => [m.name, m])).values()];
       setBreadcrumb(unique)

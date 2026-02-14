@@ -3,14 +3,16 @@ import DeliveryInformation from '@/components/DeliveryInformation/page'
 import OrderSummary from '@/components/OrderSummary/page'
 import ReviewProduct from '@/components/ReviewProduct/page'
 import Breadcrumb from '@/part/Breadcrumb/page'
+import { getStoredCheckout } from '@/lib/storage'
+import type { allProduct } from '@/models/product'
 import React, { useEffect, useState } from 'react'
 
 export default function Checkout() {
-  const [productData, setProductData] = useState([])
+  const [productData, setProductData] = useState<allProduct[]>([])
   const [isLoading, setIsLoading] = useState(true)
   useEffect(() => {
-    const datas = JSON.parse(localStorage.getItem('checkout data') as any)
-    setProductData(datas)
+    const datas = getStoredCheckout()
+    setProductData(datas ?? [])
     setIsLoading(false)
   }, [])
   return (

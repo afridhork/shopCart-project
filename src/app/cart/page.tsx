@@ -2,14 +2,15 @@
 import CartList from '@/components/CartList/page'
 import OrderSummaryCart from '@/components/OrderSummaryCart/page'
 import { useUserCartQuery } from '@/store/api/cart'
+import { getStoredAuth } from '@/lib/storage'
 import React, { useEffect, useState } from 'react'
 
 export default function page() {
   const [userID, setUserID] = useState<number>(0)
   useEffect(() => {
-    const userData = JSON.parse(localStorage.getItem('auth data') as any)
-    if(userData){
-        setUserID(userData.data.id)
+    const userData = getStoredAuth()
+    if (userData?.data?.id) {
+      setUserID(userData.data.id)
     }
   }, [])
   const {data, isSuccess, isLoading} = useUserCartQuery(userID)

@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { userCart } from '@/models/cart'
+import { userCart, AddCartRequest } from '@/models/cart'
 
 const configValue: string = `https://dummyjson.com`
 export const cartFetch = createApi({
@@ -16,7 +16,7 @@ export const cartPost = createApi({
    reducerPath:'cartPost',
    baseQuery : fetchBaseQuery({baseUrl: configValue}),
    endpoints:(builder) => ({
-      addCart: builder.mutation<any, any>({
+      addCart: builder.mutation<userCart, AddCartRequest>({
          query: payload =>({
             url: '/carts/add',
             method: 'POST',

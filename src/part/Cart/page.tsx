@@ -1,17 +1,18 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useUserCartQuery } from '@/store/api/cart'
 import { useRouter } from 'next/navigation'
+import { getStoredAuth } from '@/lib/storage'
 
 import './index.css'
 
 export default function Cart() {
-   const userData = JSON.parse(localStorage.getItem('auth data') as any)
+   const userData = getStoredAuth()
    const [userID, setUserID] = useState<number>(0)
    const [isCartOpen, setIsCartOpen] = useState(false)
    const refCart = useRef<HTMLDivElement>(null)
    const Router = useRouter()
    useEffect(() => {
-      if(userData){        
+      if (userData?.data?.id) {
          setUserID(userData.data.id)
       }
    }, [])

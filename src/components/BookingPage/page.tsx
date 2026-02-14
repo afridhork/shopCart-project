@@ -7,6 +7,8 @@ import Skeleton from 'react-loading-skeleton';
 
 import 'react-loading-skeleton/dist/skeleton.css'
 import { useAddCartMutation } from '@/store/api/cart';
+import { getStoredAuth } from '@/lib/storage';
+import type { allProduct } from '@/models/product';
 
 interface addCart {
    userId: null | number,
@@ -19,7 +21,7 @@ interface product{
 }
 
 interface dataAuth{
-   id: null | number,
+   id: number | null | undefined,
    username: string,
    email: string,
    firstName: string,
@@ -36,9 +38,9 @@ export default function BookingPage(
       isLoading,
    }: 
    {
-      data: any, 
-      breadcrumbData: string[],
-      isLoading: boolean
+      data: allProduct | undefined;
+      breadcrumbData: string[];
+      isLoading: boolean;
    }) {
    const [dataBook, setDataBook] = useState({
       totalBook: 1
@@ -67,8 +69,8 @@ export default function BookingPage(
    const [addCart] = useAddCartMutation()
    
    useEffect(() => {
-      const authData_local = JSON.parse(localStorage.getItem('auth data') as any)
-      if(authData_local){
+      const authData_local = getStoredAuth()
+      if (authData_local?.data) {
          setAuthData(authData_local.data)
       }
       if(data){
@@ -91,9 +93,10 @@ export default function BookingPage(
    }, [data,dataBook])
    
    function handleAddCart(){
-      if(authData.id != null){
-         addCart(payloadAddCart)
-      }else{
+      const first = payloadAddCart.products[0]
+      if (authData.id != null && payloadAddCart.userId != null && first?.id != null && first?.quantity != null) {
+         addCart({ userId: payloadAddCart.userId, products: [{ id: first.id, quantity: first.quantity }] })
+      } else {
          console.log('etst');
          setErrorMsg('You must sign in first')
       }
@@ -162,7 +165,7 @@ export default function BookingPage(
                   <div className="flex items-center overflow-x-auto whitespace-nowrap mt-5 border-b-2 pb-1">
                      {
                         isLoading ? <Skeleton width="380px" height="50px"/> : (
-                           data?.images?.map((image: any,index: any) =>{
+                           data?.images?.map((image: string, index: number) => {
                               return(
                                  <div className="flex items-center cursor-pointer p-1 mr-2 h-20 hover:border-2" onClick={()=>handleClickChangeImg(image)} key={index}>
                                     <img className='img-slide' src={image} width="100" alt="" />

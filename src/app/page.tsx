@@ -8,8 +8,11 @@ import TopBrand from '@/components/TopBrand/page';
 import { useAllProductQuery } from '@/store/api/product';
 
 import { count } from '@/models/brand';
-import { useDispatch } from 'react-redux';
-import { topBrand, listItem, categoryItem } from '@/store/slices/landingPage';
+import { useAppDispatch } from '@/store/hooks';
+import { setTopBrand } from '@/store/slices/brandSlice';
+import { setDiscountItems } from '@/store/slices/discountSlice';
+import { setRatingItems } from '@/store/slices/ratingSlice';
+import { setCategoryItems } from '@/store/slices/categorySlice';
 import BestRating from '@/components/BestRating/page';
 import BannerDiscount from '@/components/BannerDiscount/page';
 import ProductChoice from '@/components/ProductChoice/page';
@@ -17,22 +20,17 @@ import CustomSkeleton from '@/part/CustomSkeleton/page';
 import Skeleton from 'react-loading-skeleton';
 
 export default function page() {
-  const dispatch = useDispatch()
+  const dispatch = useAppDispatch()
   const {data,isSuccess,isLoading} = useAllProductQuery()
   // const [topBrand, setTopBrand] = useState<count[]>([])
   useEffect(() => {
-    if(isSuccess) {
-      dispatch(
-        topBrand(data)
-      )
-      dispatch(
-        listItem(data)
-      )
-      dispatch(
-        categoryItem(data)
-      )
+    if (isSuccess && data) {
+      dispatch(setTopBrand(data));
+      dispatch(setDiscountItems(data));
+      dispatch(setRatingItems(data));
+      dispatch(setCategoryItems(data));
     }
-  }, [data])
+  }, [data, isSuccess, dispatch]);
   
   // useEffect(() => {
   //   if(isSuccess){

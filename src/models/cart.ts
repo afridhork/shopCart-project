@@ -24,3 +24,8 @@ export interface productCart{
    total: number,
    value?:boolean
 }
+
+export interface AddCartRequest {
+  userId: number;
+  products: { id: number; quantity: number }[];
+}

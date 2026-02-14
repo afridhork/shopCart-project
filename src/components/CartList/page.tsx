@@ -1,12 +1,12 @@
 import { productCart } from '@/models/cart'
 import InputCheckBox from '@/part/FormInput/InputCheckBox/page'
-import { CartData } from '@/store/slices/cartPage'
+import { CartData } from '@/store/slices/cartSlice'
 import React, { useEffect, useState } from 'react'
 import Skeleton from 'react-loading-skeleton'
-import { useDispatch } from 'react-redux'
+import { useAppDispatch } from '@/store/hooks'
 
 export default function CartList({data, isLoading}:{data: productCart[], isLoading: boolean}) {
-   const dispatch = useDispatch()
+   const dispatch = useAppDispatch()
    const [allItemValue, setAllItemValue] = useState<boolean>(false)
    const [itemList, setItemList] = useState(data)
    const [isCheckClidked, setIsCheckClidked] = useState<boolean>(false)
