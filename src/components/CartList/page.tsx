@@ -9,19 +9,24 @@ export default function CartList({data, isLoading}:{data: productCart[], isLoadi
    const dispatch = useAppDispatch()
    const [allItemValue, setAllItemValue] = useState<boolean>(false)
    const [itemList, setItemList] = useState(data)
-   const [isCheckClidked, setIsCheckClidked] = useState<boolean>(false)
+   const [isCheckClicked, setIsCheckClicked] = useState<boolean>(false)
+
+   useEffect(() => {
+      setItemList(data.map((item) => ({ ...item, value: item.value ?? false })))
+   }, [data])
+
    useEffect(() => {
       setItemList(prev => {
          const newData = [...prev]
-         newData.map((item,index) =>{
-            newData[index] = {...item, value:false}
+         newData.map((item, index) => {
+            newData[index] = { ...item, value: false }
          })
          return newData
       })
-   },[])
+   }, [])
    
    function handleClickCheckbox(index?:number){
-      setIsCheckClidked(true)
+      setIsCheckClicked(true)
       if(typeof index != 'undefined'){
          setItemList(prev => {
             const newData = [...prev]
@@ -34,7 +39,7 @@ export default function CartList({data, isLoading}:{data: productCart[], isLoadi
    }
 
    useEffect(() => {
-      if(isCheckClidked){
+      if (isCheckClicked) {
          setItemList(prev=> {
             const newData = [...prev]
             newData.map((item,index) =>{

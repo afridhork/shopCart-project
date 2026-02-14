@@ -97,7 +97,6 @@ export default function BookingPage(
       if (authData.id != null && payloadAddCart.userId != null && first?.id != null && first?.quantity != null) {
          addCart({ userId: payloadAddCart.userId, products: [{ id: first.id, quantity: first.quantity }] })
       } else {
-         console.log('etst');
          setErrorMsg('You must sign in first')
       }
    }

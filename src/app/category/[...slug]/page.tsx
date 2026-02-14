@@ -9,12 +9,9 @@ import { useSingleProductQuery } from '@/store/api/product'
 import React, { ChangeEvent, useState, useEffect } from 'react'
 
 export default function categoryDetailProductPageEx({params}: {params: {slug: string[]}}) {
-   const {data,isSuccess, isLoading} = useSingleProductQuery(+params.slug[1])
-   useEffect(() => {
-      console.log(params);
-      console.log(data);
-   },[])
-   if(isLoading){
+   const { data, isSuccess, isLoading } = useSingleProductQuery(+params.slug[1])
+
+   if (isLoading) {
       return(
          <div className='container px-10 py-5'>
             <BookingPage data={data ?? undefined} isLoading={isLoading} breadcrumbData={[params.slug[0],'']} />

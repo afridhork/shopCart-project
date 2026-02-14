@@ -8,7 +8,7 @@ import Footer from '@/components/Footer/page';
 
 import 'react-loading-skeleton/dist/skeleton.css'
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: {
   children: React.ReactNode

@@ -176,4 +176,19 @@ Perubahan berikut dilakukan agar kode mengikuti panduan di **skills.md**: konven
 
 ---
 
-*Terakhir diperbarui: penyelarasan dengan skills.md (slice naming, typed hooks, tipe API, util storage, pengurangan any).*
+## 8. Penutupan poin CODE_REVIEW.md
+
+Agar semua poin di **CODE_REVIEW.md** teratasi atau tercatat statusnya:
+
+| Perubahan | Untuk apa |
+|-----------|------------|
+| **`src/app/cart/page.tsx`** | Akses aman: `data?.carts?.[0]?.products ?? []`, `skip: userID === 0`; tampilan "Silakan login...", "Keranjang kosong", atau CartList. |
+| **`src/app/layout.tsx`** | Hapus `async` dari `RootLayout`. |
+| **`src/components/CartList/page.tsx`** | Typo `isCheckClidked` → `isCheckClicked`; `useEffect([data])` untuk sinkron `itemList` dengan props `data`. |
+| **`src/app/page.tsx`** | Hapus blok komentar panjang dan import yang tidak terpakai. |
+| **`src/app/category/[...slug]/page.tsx`**, **`src/components/BookingPage/page.tsx`** | Hapus `console.log`. |
+| **`CODE_REVIEW.md`** | Tambah status per poin (✅/⚠️) dan tabel saran berprioritas dengan kolom Status. |
+
+---
+
+*Terakhir diperbarui: penyelarasan dengan skills.md; penutupan poin CODE_REVIEW (cart aman, layout, typo, sync CartList, bersihkan kode mati & console, update status review).*

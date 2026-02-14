@@ -2,6 +2,8 @@
 
 Review struktur dan kualitas kode — **Next.js 13 (App Router) + React 18 + TypeScript + Redux Toolkit**.
 
+**Status perbarui:** Setelah penyelarasan dengan `skills.md` dan perbaikan lanjutan, status tiap poin dicantumkan di bawah (✅ teratasi / ⚠️ sebagian / ❌ belum).
+
 ---
 
 ## Yang Sudah Baik
@@ -17,139 +19,100 @@ Review struktur dan kualitas kode — **Next.js 13 (App Router) + React 18 + Typ
 
 ## Masalah Kritis
 
-### 1. Redux: Satu reducer dipakai untuk banyak state key
+### 1. Redux: Satu reducer dipakai untuk banyak state key — ✅ Teratasi
 
 **File:** `src/store/index.ts`
 
-```ts
-dataBrand: landingPageReducer,
-dataDiscount: landingPageReducer,
-dataRating: landingPageReducer,
-dataCategory: landingPageReducer,
-```
-
-Satu reducer (`landingPageReducer`) dipasang ke empat key. Setiap dispatch ke salah satu aksi (mis. `topBrand`, `listItem`, `categoryItem`) akan mengubah **semua** key tersebut karena state-nya satu. Ini bug logika: data brand, discount, rating, dan category saling timpa.
-
-**Rekomendasi:** Satu key saja untuk landing page, mis. `landingPage: landingPageReducer`, lalu di komponen pakai `state.landingPage.topBrand`, `state.landingPage.discountItems`, dll.
+Satu reducer (`landingPageReducer`) dulu dipasang ke empat key; sekarang setiap key punya reducer sendiri: `brandSlice`, `discountSlice`, `ratingSlice`, `categorySlice` (plus `searchSlice`, `cartSlice`, `checkoutSlice`). Satu slice per domain, payload bertipe dari `/models`.
 
 ---
 
-### 2. Crash saat cart kosong
+### 2. Crash saat cart kosong — ✅ Teratasi
 
 **File:** `src/app/cart/page.tsx`
 
-```tsx
-isSuccess && (<CartList ... data={data.carts[0].products}/>)
-```
-
-Jika `data.carts` kosong atau `carts` undefined, akses `data.carts[0]` akan error.
-
-**Rekomendasi:** Cek dulu sebelum akses, mis. `data?.carts?.[0]?.products` dan tampilkan state kosong (mis. "Keranjang kosong") atau jangan panggil cart API saat user belum login (`userID === 0`).
+Akses aman: `data?.carts?.[0]?.products ?? []`, `useUserCartQuery(userID, { skip: userID === 0 })`. Tampilan: pesan "Silakan login..." bila `userID === 0`, "Keranjang kosong" bila carts kosong, else `CartList` dengan `cartProducts`.
 
 ---
 
-### 3. Layout: `async` tanpa `await` + `'use client'`
+### 3. Layout: `async` tanpa `await` — ✅ Teratasi
 
 **File:** `src/app/layout.tsx`
 
-- Root layout dideklarasikan `async function` tapi tidak ada `await`.
-- Layout memakai `'use client'` (karena `Provider`, dll.) — di Next.js 13, komponen client tidak boleh async.
-
-**Rekomendasi:** Hapus kata kunci `async` dari `RootLayout`.
+Kata kunci `async` sudah dihapus dari `RootLayout`; layout tetap server component (tanpa `'use client'`), dengan `Provider` di dalam.
 
 ---
 
-### 4. Typo & nama komponen
+### 4. Typo & nama komponen — ✅ Sebagian
 
-- **CartList:** state `isCheckClidked` → sebaiknya `isCheckClicked`.
-- **Halaman:** banyak default export bernama `page` atau `categoryDetailProductPage` (camelCase). Untuk komponen React lebih lazim PascalCase, mis. `Page` / `CategoryDetailProductPage`, agar konsisten dengan konvensi React.
+- **CartList:** typo `isCheckClidked` → `isCheckClicked` sudah diperbaiki.
+- **Nama komponen:** default export `page`, `categoryDetailProductPage`, dll. masih camelCase; mengubah ke PascalCase (mis. `Page`, `CategoryDetailProductPage`) opsional untuk konsistensi konvensi React.
 
 ---
 
 ## Masalah Menengah
 
-### 5. Tipe data (TypeScript)
+### 5. Tipe data (TypeScript) — ✅ Teratasi
 
-- **`src/models/product.ts`:** `products: allProduct` — response API DummyJSON adalah array, seharusnya `products: allProduct[]`.
-- **`src/store/api/category.ts`:** endpoint `allProduct` dideklarasikan mengembalikan `allProduct[]`, padahal API mengembalikan objek `{ products, total, skip, limit }` — tipe response tidak sesuai.
-- **Pemakaian `any`:** banyak sekali (localStorage, event handler, props, ref). Contoh:
-  - `localStorage.getItem('auth data') as any`
-  - `(e: any) => void`, `data: any`, `useRef<any>`
-  - Mutation RTK: `builder.mutation<any, any>`
-
-**Rekomendasi:**  
-- Perbaiki tipe response API (product list vs single product vs cart) di `models/` dan di RTK Query.  
-- Buat tipe untuk auth (simpan di `models/`) dan gunakan untuk payload + localStorage.  
-- Ganti `any` bertahap: `ChangeEvent<HTMLInputElement>`, tipe payload cart/auth, dan jenis ref yang dipakai.
+- **`src/models/product.ts`:** `products: allProduct[]` sudah benar.
+- **API:** Auth dan cart API memakai tipe dari `models/auth` dan `models/cart`; mutation tidak lagi `any, any`.
+- **`any`:** Berkurang signifikan: util `@/lib/storage` (localStorage bertipe), props/ref bertipe (productCart, allProduct, useRef<HTMLDivElement | null>), tipe payload slice dari model.
 
 ---
 
-### 6. Duplikasi API "all products"
+### 6. Duplikasi API "all products" — ✅ Teratasi
 
-- **Product API** (`store/api/product.ts`): `allProduct` → `useAllProductQuery()`.
-- **Category API** (`store/api/category.ts`): juga `allProduct` → `useAllProductQuery()`.
-
-Dua endpoint sama (`/products?limit=0`) di dua API slice berbeda bisa membingungkan dan duplikasi cache/key.
-
-**Rekomendasi:** Satu sumber saja (mis. hanya dari `product` API) untuk "all products", dan hapus dari category API. Category API fokus ke `categoryList` (daftar kategori).
+Satu sumber: "all products" dipakai dari **product API** (`useAllProductQuery` dari `@/store/api/product`). Footer dan halaman lain memakai product API; category API fokus ke `categoryList`.
 
 ---
 
-### 7. Slice landing: nama reducer vs state key
+### 7. Slice landing: nama reducer vs state key — ✅ Teratasi
 
-**File:** `src/store/slices/landingPage.ts`
-
-Reducer bernama `topBrand` dan state key juga `topBrand`. Di Redux Toolkit ini valid, tapi bersama pola "satu reducer banyak key" di store (poin 1) memperparah kebingungan. Setelah konsolidasi ke satu key `landingPage`, pastikan nama aksi dan state key konsisten dan jelas.
+`landingPage.ts` sudah dihapus. Slice terpisah per domain (`brandSlice`, `discountSlice`, dll.) dengan nama file `*Slice.ts`, state key dan aksi konsisten (mis. `dataBrand.topBrand`, `setTopBrand`).
 
 ---
 
-### 8. Keamanan & error handling
+### 8. Keamanan & error handling — ✅ Sebagian
 
-- **localStorage:** `JSON.parse(localStorage.getItem('auth data') as any)` dan serupa untuk `checkout data`, `delivery info` — jika key tidak ada atau nilai invalid, bisa throw.
-- **Auth:** Credential dan token disimpan di localStorage; tidak ada refresh token atau penanganan session expiry (kondisional).
-- **RTK Query:** Tidak terlihat penanganan error global (mis. `isError`, `error` dari hook) di UI; pengguna bisa tidak dapat feedback saat network/API gagal.
-
-**Rekomendasi:**  
-- Bungkus `JSON.parse` dengan try/catch dan beri nilai default (null/[]).  
-- Tampilkan error state dari RTK Query (toast atau pesan di halaman) dan, jika perlu, redirect ke login saat 401.
+- **localStorage:** ✅ `@/lib/storage` membungkus baca/tulis dengan try/catch dan mengembalikan `null` / default; tidak lagi `JSON.parse(... as any)` di banyak tempat.
+- **Auth:** Token tetap di localStorage; refresh token / session expiry belum diimplementasi (bisa prioritas berikutnya).
+- **RTK Query:** ⚠️ `isError` / `error` dari hook belum ditampilkan secara global di UI (toast atau pesan per halaman); disarankan ditambah agar pengguna dapat feedback saat API gagal.
 
 ---
 
-### 9. Kode mati dan console
+### 9. Kode mati dan console — ✅ Teratasi
 
-- **`src/app/page.tsx`:** Blok komentar panjang (~40 baris) — lebih baik dihapus atau dipindah ke doc/notes jika masih perlu referensi.
-- **`src/components/Header/page.tsx`:** Ada `console.log('cek', ...)` — sebaiknya dihapus untuk production.
+- **`src/app/page.tsx`:** Blok komentar panjang sudah dihapus.
+- **Console:** `console.log` yang tidak perlu sudah dihapus (category/[...slug], BookingPage); Header tidak lagi memakai console di alur kategori.
 
 ---
 
-### 10. Sinkronisasi state dengan props
+### 10. Sinkronisasi state dengan props — ✅ Teratasi
 
 **File:** `src/components/CartList/page.tsx`
 
-`itemList` di-initialize dari `data` (props) dan di-update lewat checkbox. Jika `data` berubah dari luar (mis. refetch), `itemList` tidak ikut update karena hanya di-set lewat `useState(data)` sekali.
-
-**Rekomendasi:** Sync dengan props, mis. `useEffect` yang set `itemList(data)` ketika `data` berubah, atau turunkan "selected" sebagai controlled state dari parent agar single source of truth.
+`useEffect` dengan dependency `[data]` men-set `itemList` dari `data` ketika props `data` berubah (mis. setelah refetch), sehingga state ikut sinkron dengan data terbaru.
 
 ---
 
 ## Saran Perbaikan Berprioritas
 
-| Prioritas | Aksi |
-|-----------|------|
-| Tinggi    | Perbaiki store: satu key untuk landing page, jangan satu reducer untuk dataBrand/dataDiscount/dataRating/dataCategory. |
-| Tinggi    | Amankan akses cart: cek `data?.carts?.[0]` dan handle user belum login. |
-| Tinggi    | Hapus `async` dari root layout. |
-| Sedang    | Perbaiki tipe Product/API (products array, response shape) dan kurangi `any` (terutama auth dan cart). |
-| Sedang    | Satu sumber untuk "all products" (hapus duplikasi di category API). |
-| Sedang    | Safe parse localStorage (try/catch + default) dan tampilkan error dari RTK Query. |
-| Rendah    | Hapus komentar panjang dan `console.log`, perbaiki typo, konsistenkan nama komponen (PascalCase). |
+| Prioritas | Aksi | Status |
+|-----------|------|--------|
+| Tinggi    | Perbaiki store: satu reducer per key (bukan satu reducer untuk dataBrand/dataDiscount/dataRating/dataCategory). | ✅ |
+| Tinggi    | Amankan akses cart: cek `data?.carts?.[0]` dan handle user belum login. | ✅ |
+| Tinggi    | Hapus `async` dari root layout. | ✅ |
+| Sedang    | Perbaiki tipe Product/API dan kurangi `any` (auth, cart, props, ref). | ✅ |
+| Sedang    | Satu sumber untuk "all products" (product API). | ✅ |
+| Sedang    | Safe parse localStorage (try/catch + default); tampilkan error dari RTK Query. | ✅ / ⚠️ (error UI belum global) |
+| Rendah    | Hapus komentar panjang dan `console.log`, perbaiki typo; nama komponen PascalCase. | ✅ / ⚠️ (PascalCase opsional) |
 
 ---
 
 ## Ringkasan
 
 - **Struktur proyek dan pilihan teknologi** sudah bagus dan konsisten.
-- **Masalah paling riskan:** konfigurasi Redux (satu reducer banyak key) dan akses `data.carts[0]` tanpa pengecekan.
-- **Peningkatan terbesar berikutnya:** perbaikan tipe TypeScript (model + API), satu sumber data "all products", dan penanganan error serta localStorage yang aman.
+- **Masalah kritis dan menengah** dari review awal pada dasarnya **sudah teratasi**: Redux per-slice, cart aman, layout tanpa async, tipe & API rapi, satu sumber all products, localStorage lewat util, CartList sync dengan props, typo diperbaiki, kode mati dan console dibersihkan.
+- **Opsional ke depan:** tampilkan `isError`/`error` RTK Query di UI (toast/pesan), konsistenkan nama komponen ke PascalCase, dan (jika perlu) penanganan session/refresh token untuk auth.
 
-Dengan perbaikan di atas, maintainability dan keandalan aplikasi akan jauh lebih baik.
+Dengan perbaikan yang sudah dilakukan, maintainability dan keandalan aplikasi sudah jauh lebih baik.
