@@ -2,9 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-import 'react-loading-skeleton/dist/skeleton.css'
-
-:root{
+:root {
   @apply font-sans !important;
 }
 
@@ -57,17 +55,12 @@ import 'react-loading-skeleton/dist/skeleton.css'
     -webkit-appearance: none;
     margin: 0;
   }
-  
-  @layer components {
-    .card {
-      background-color: theme('colors.white');
-      border-radius: theme('borderRadius.lg');
-      /* box-shadow: theme('boxShadow.xl'); */
-    }
-    
-    /* .container{
-      @apply px-10;
-    } */
+}
+
+@layer components {
+  .card {
+    background-color: theme('colors.white');
+    border-radius: theme('borderRadius.lg');
   }
 }
 
@@ -132,8 +125,8 @@ li{
   display: none;
 }
 
-/* Top categoreis */
-.categoreis-wrapper{
+/* Top categories */
+.categories-wrapper {
   @apply relative;
   .prev-slide{
     @apply sm:hidden absolute bg-gray-200 hover:bg-gray-400 p-2 rounded-full left-0 top-1/2 z-10;
@@ -178,7 +171,7 @@ li{
       &:hover{
         @apply border border-black;
       }
-      .brand-img-wraper{
+      .brand-img-wrapper {
         @apply relative border border-gray-300 bg-white rounded-full mr-3;
         &:hover{
           transform: scale(1.2);
@@ -208,8 +201,8 @@ li{
 }
 .meta-wrapper{
   @apply  absolute container text-right ml-auto top-[20%] sm:top-1/4;
-  .discount-content{
-    @apply ml-auto bg-emerald-900 p-2 sm:p-12 text-left max-w-[200px] sm:max-w-[300px] sm:max-w-lg;
+  .discount-content {
+    @apply ml-auto bg-emerald-900 p-2 sm:p-12 text-left max-w-[200px] sm:max-w-lg;
     .title-font{
       @apply block text-white text-base sm:text-[52px] leading-[25px] sm:leading-[60px];
     }
