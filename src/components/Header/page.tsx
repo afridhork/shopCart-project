@@ -16,6 +16,7 @@ import Cart from '@/part/Cart/page';
 import Skeleton from 'react-loading-skeleton';
 import { getStoredAuth, setStoredAuth, removeStoredAuth } from '@/lib/storage';
 import type { dataUserModel } from '@/models/checkout';
+import type { AuthSigninResponse } from '@/models/auth';
 
 interface product{
   name: string,
@@ -38,8 +39,9 @@ export default function Header() {
     id:0,
     image: '',
     lastName:'',
-    token:'',
-    username:''
+    username:'',
+    accessToken:'',
+    refreshToken:''
   })
 
   const [accountDropdown, setAccountDropdown] = useState(false)
@@ -63,7 +65,8 @@ export default function Header() {
         id:0,
         image: '',
         lastName:'',
-        token:'',
+        accessToken:'',
+        refreshToken:'',
         username:''
       })
     }
@@ -77,7 +80,25 @@ export default function Header() {
     if(!authData.username){
       signin(formPayload).then((payload) => {
         setLogin(prev => !prev)
-        if ('data' in payload && payload.data) setStoredAuth({ data: payload.data as dataUserModel })
+        if ('data' in payload && payload.data) {
+          const signinData = payload.data as AuthSigninResponse;
+          const userForStorage: dataUserModel = {
+            id: signinData.id,
+            username: signinData.username,
+            email: signinData.email,
+            firstName: signinData.firstName,
+            lastName: signinData.lastName,
+            gender: signinData.gender,
+            image: signinData.image,
+            phone: '',
+            address: '',
+            city: '',
+            postalCode: '',
+            accessToken: signinData.token,
+            refreshToken: '',
+          };
+          setStoredAuth({ data: userForStorage });
+        }
         setOpenModal(prev => !prev)
         window.location.reload()
       })
