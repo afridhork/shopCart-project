@@ -14,7 +14,9 @@ export interface StoredAuth {
 export function getStoredAuth(): StoredAuth | null {
   try {
     const raw = localStorage.getItem(AUTH_KEY);
+    
     if (!raw) return null;
+    console.log('cek raw', JSON.parse(raw));
     return JSON.parse(raw) as StoredAuth;
   } catch {
     return null;

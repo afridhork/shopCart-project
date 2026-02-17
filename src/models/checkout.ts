@@ -19,6 +19,7 @@ export interface dataUserModel{
    city: string,
    postalCode: string
    lastName:string,
-   token:string,
+   accessToken:string,
+   refreshToken:string,
    username:string
 }

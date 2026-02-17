@@ -21,7 +21,8 @@ export default function DeliveryInformation() {
       city: "",
       postalCode: "",
       lastName:'',
-      token:'',
+      accessToken:'',
+      refreshToken:'',
       username:''
    })
    const [deliveryInformation, setDeliveryInformation] = useState<DeliveryInformationModel>({
@@ -67,7 +68,7 @@ export default function DeliveryInformation() {
    }
 
    function handleClickCheckbox(){
-      if(dataUser.token){
+      if(dataUser.accessToken){
          setValueCheckbox(prev => !prev)
          setErrMsgCheckbox('')
          setDeliveryInformation(prev => {
